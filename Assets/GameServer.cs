@@ -61,14 +61,17 @@ public class GameServer : MonoBehaviour
 		}
 
         //Setup NetworkManager
-        if (mgr == null && networkManager == null)
+        if (isMainSceneServer) //Only 1 Network Manager can be running
         {
-            Debug.LogWarning("A network manager was not provided, generating a new one instead");
-            networkManager = new GameObject("Network Manager");
-            mgr = networkManager.AddComponent<NetworkManager>();
+            if (mgr == null && networkManager == null)
+            {
+                Debug.LogWarning("A network manager was not provided, generating a new one instead");
+                networkManager = new GameObject("Network Manager");
+                mgr = networkManager.AddComponent<NetworkManager>();
+            }
+            else if (mgr == null) //Instantiate Prefab
+                mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
         }
-        else if (mgr == null) //Instantiate Prefab
-            mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
 
 
         //Setup Server for Spawning Objects/RPCs
