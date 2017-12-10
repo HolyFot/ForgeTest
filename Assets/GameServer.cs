@@ -160,7 +160,8 @@ public class GameServer : MonoBehaviour
 
 	private void OnApplicationQuit()
 	{
-        server.Disconnect(true);
+        server.Disconnect(true); //Disconnecting Fixes Unity Freezing on Recompile
+
         Debug.Log("Server Shutdown. Runtime: " + Time.time + " seconds.");
 	}
 }
