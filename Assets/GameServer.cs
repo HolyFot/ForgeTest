@@ -16,8 +16,9 @@ public class GameServer : MonoBehaviour
 
 	public bool useMainThreadManagerForRPCs = true;
 	public bool useTCP = false;
-    public string hostIP = "127.0.0.1";
-    public int hostPort = 12345;
+    public string hostIP;
+    public int hostPort;
+    public bool isMainSceneServer;
 
 	NetWorker server;
 
@@ -27,6 +28,7 @@ public class GameServer : MonoBehaviour
 
 		if (useMainThreadManagerForRPCs)
 			Rpc.MainThreadRunner = MainThreadManager.Instance;
+
         Host(hostIP, hostPort);
 	}
 
@@ -59,17 +61,20 @@ public class GameServer : MonoBehaviour
 		}
 
         //Setup NetworkManager
-		if (mgr == null && networkManager == null)
-		{
-			Debug.LogWarning("A network manager was not provided, generating a new one instead");
-			networkManager = new GameObject("Network Manager");
-			mgr = networkManager.AddComponent<NetworkManager>();
-		}
-		else if (mgr == null) //Instantiate Prefab
-			mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
+        if (mgr == null && networkManager == null)
+        {
+            Debug.LogWarning("A network manager was not provided, generating a new one instead");
+            networkManager = new GameObject("Network Manager");
+            mgr = networkManager.AddComponent<NetworkManager>();
+        }
+        else if (mgr == null) //Instantiate Prefab
+            mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
+
 
         //Setup Server for Spawning Objects/RPCs
-        mgr.Initialize(server);
+        if (isMainSceneServer)
+            mgr.Initialize(server);
+
 
         //Handle Connects/Disconnects
         networker.playerConnected += PlayerConnected2;
@@ -86,8 +91,11 @@ public class GameServer : MonoBehaviour
 
 
         //Spawn Server Player
-        Debug.Log("Spawning Server Player");
-        Invoke("SpawnServerPlayer", 1.0f);
+        if (isMainSceneServer)
+        {
+            Debug.Log("Spawning Server Player");
+            Invoke("SpawnServerPlayer", 1.0f);
+        }
 	}
 
     private void ReadBinary(NetworkingPlayer player, Binary frameData, NetWorker networker1)
@@ -111,7 +119,7 @@ public class GameServer : MonoBehaviour
 
     public void SpawnServerPlayer()
     {
-        SpawnPlayer(server.Me.NetworkId);   //server.Me.NetworkId);
+        SpawnPlayer(server.Me.NetworkId);
     }
 
 

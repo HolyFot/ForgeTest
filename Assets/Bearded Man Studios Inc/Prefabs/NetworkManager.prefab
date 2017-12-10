@@ -44,7 +44,7 @@ MonoBehaviour:
   - {fileID: 1000012032569418, guid: b454b1be0b2c3fa4fb48430867af7566, type: 2}
   PlayerNetworkObject:
   - {fileID: 100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
-  automaticScenes: 1
+  automaticScenes: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
