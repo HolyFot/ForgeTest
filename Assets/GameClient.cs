@@ -80,7 +80,7 @@ public class GameClient : MonoBehaviour
     //Request to Spawn Player
     public void RequestSpawnPlayer(string username)
     {
-        Debug.Log("Sending Enter World Request");
+        Debug.Log("Sending Spawn Player Request");
 
         //SEND PACKET: SPAWN PLAYER
         ulong timestep = client.Time.Timestep;

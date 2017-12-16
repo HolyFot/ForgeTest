@@ -13,7 +13,7 @@ public class CharSelect : MonoBehaviour
 
         GameSettings.chosenChar = playerName; //Set Global Game Settings
 
-        Debug.Log("Enter World, player " + playerName);
+        Debug.Log("Spawn Player: " + playerName);
         SceneManager.LoadScene("MainScene");
     }
 

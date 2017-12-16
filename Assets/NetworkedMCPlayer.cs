@@ -16,8 +16,9 @@ public class NetworkedMCPlayer : PlayerBehavior
     private float mPhaseElapsedTime = 0f; // Time before we'll change the motion phase
     private bool isSetup;
 
-    private void NetworkStart()
+    protected override void NetworkStart()
     {
+        base.NetworkStart();
         //Enable Camera for Owned Player
         if (!networkObject.IsOwner)
         {
