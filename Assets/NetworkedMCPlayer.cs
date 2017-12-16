@@ -2,6 +2,7 @@ using UnityEngine;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Unity;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class NetworkedMCPlayer : PlayerBehavior
 {
@@ -17,8 +18,14 @@ public class NetworkedMCPlayer : PlayerBehavior
 
     private void NetworkStart()
     {
-        //Get Animator on Clients/Servers
-
+        //Enable Camera for Owned Player
+        if (!networkObject.IsOwner)
+        {
+            Debug.Log("Disable Remote Player's camera");
+            this.transform.GetComponent<FirstPersonController>().enabled = false;
+            this.transform.Find("FirstPersonCharacter").GetComponent<AudioListener>().enabled = false;
+            this.transform.Find("FirstPersonCharacter").GetComponent<Camera>().enabled = false;
+        }
 
         Debug.Log("NetworkStart setup for Player!");
         isSetup = true;

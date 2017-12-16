@@ -13,13 +13,11 @@ public class GameServer : MonoBehaviour
 {
 	public GameObject networkManager = null;
 	private NetworkManager mgr = null;
-
 	public bool useMainThreadManagerForRPCs = true;
-	public bool useTCP = false;
     public string hostIP;
     public int hostPort;
     public bool isMainSceneServer;
-
+    private int SpawnPlayerOpcode = 5;
 	NetWorker server;
 
 	private void Start()
@@ -29,7 +27,8 @@ public class GameServer : MonoBehaviour
 		if (useMainThreadManagerForRPCs)
 			Rpc.MainThreadRunner = MainThreadManager.Instance;
 
-        Host(hostIP, hostPort);
+        if (GameSettings.isServer == true) //IF IT IS A CLIENT, DONT START SERVER
+            Host(hostIP, hostPort);
 	}
 
     private void Awake()
@@ -96,7 +95,6 @@ public class GameServer : MonoBehaviour
         //Spawn Server Player
         if (isMainSceneServer)
         {
-            Debug.Log("Spawning Server Player");
             Invoke("SpawnServerPlayer", 1.0f);
         }
 	}
@@ -107,22 +105,36 @@ public class GameServer : MonoBehaviour
         BMSByte data = frameData.StreamData;
 
         //Handle Packets
+        if (frameData.GroupId == start + SpawnPlayerOpcode)
+            HandleSpawnPlayerRequest(player, data);
     }
 
-
-    public void SpawnPlayer(uint netID)
+    public void HandleSpawnPlayerRequest(NetworkingPlayer sender, BMSByte stream)
     {
-        Debug.Log("Spawning Player");
+        string charName1 = ObjectMapper.Instance.Map<string>(stream);
+        sender.Name = charName1;
 
-        var player1 = NetworkManager.Instance.InstantiatePlayer();
+        Debug.Log("Spawning Client Player");
+        SpawnPlayer(sender.NetworkId, true, sender);
+    }
 
-        //Set Player Owner
-        player1.networkObject.playerNetworkId = netID;
+    public void SpawnPlayer(uint netID, bool isClient, NetworkingPlayer clientPlayer)
+    {
+        //Spawn Player & Set Player Owner
+        MainThreadManager.Run(() =>
+        {
+            var player1 = NetworkManager.Instance.InstantiatePlayer();
+            player1.networkObject.playerNetworkId = netID;
+
+            if (isClient)
+                player1.networkObject.AssignOwnership(clientPlayer);
+        });
     }
 
     public void SpawnServerPlayer()
     {
-        SpawnPlayer(server.Me.NetworkId);
+        Debug.Log("Spawning Server Player");
+        SpawnPlayer(server.Me.NetworkId, false, null);
     }
 
 
@@ -160,8 +172,10 @@ public class GameServer : MonoBehaviour
 
 	private void OnApplicationQuit()
 	{
-        server.Disconnect(true); //Disconnecting Fixes Unity Freezing on Recompile
+		if (server != null)
+        	server.Disconnect(true); //Disconnecting Fixes Unity Freezing on Recompile
 
-        Debug.Log("Server Shutdown. Runtime: " + Time.time + " seconds.");
+        if (!isMainSceneServer)
+            Debug.Log("Server Shutdown. Runtime: " + Time.time + " seconds.");
 	}
 }
