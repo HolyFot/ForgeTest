@@ -73,13 +73,10 @@ public class GameServer : MonoBehaviour
             }
             else if (mgr == null) //Instantiate Prefab
                 mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
+
+            //Setup Server for Spawning Objects/RPCs
+            mgr.Initialize(networker);
         }
-
-
-        //Setup Server for Spawning Objects/RPCs
-        if (isMainSceneServer)
-            mgr.Initialize(server);
-
 
         //Handle Connects/Disconnects
         networker.playerConnected += PlayerConnected2;
@@ -89,10 +86,10 @@ public class GameServer : MonoBehaviour
         networker.binaryMessageReceived += ReadBinary;
 
         //IS NEEDED?
-		//if (networker is IServer)
-		//{
-		    //NetworkObject.Flush(networker); //Called because we are already in the correct scene!
-		//}
+		if (networker is IServer)
+		{
+		    NetworkObject.Flush(networker); //Called because we are already in the correct scene!
+		}
 
 
         //Spawn Server Player
