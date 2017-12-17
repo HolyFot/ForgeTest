@@ -15,10 +15,12 @@ public class NetworkedMCPlayer : PlayerBehavior
     private float mSendElapsedTime = 0f; // Time since the last send
     private float mPhaseElapsedTime = 0f; // Time before we'll change the motion phase
     private bool isSetup;
+    private bool isPlayerSetup;
 
     protected override void NetworkStart()
     {
         base.NetworkStart();
+
         //Enable Camera for Owned Player
         if (!networkObject.IsOwner)
         {
@@ -30,6 +32,7 @@ public class NetworkedMCPlayer : PlayerBehavior
 
         Debug.Log("NetworkStart setup for Player!");
         isSetup = true;
+        isPlayerSetup = false;
     }
 
     private void Update()
@@ -44,6 +47,16 @@ public class NetworkedMCPlayer : PlayerBehavior
 
             //Sync Animations
             //SyncAnimations();
+
+            //Enable Camera for Owned Player
+            if (networkObject.IsOwner && isPlayerSetup == false)
+            {
+                Debug.Log("Enable Local Player's camera");
+                this.transform.GetComponent<FirstPersonController>().enabled = true;
+                this.transform.Find("FirstPersonCharacter").GetComponent<AudioListener>().enabled = true;
+                this.transform.Find("FirstPersonCharacter").GetComponent<Camera>().enabled = true;
+                isPlayerSetup = true;
+            }
         }
         else //Receive Data on Remote Players
         {

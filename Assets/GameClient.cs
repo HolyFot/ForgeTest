@@ -70,7 +70,9 @@ public class GameClient : MonoBehaviour
 			    mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
 
             //Setup Server for Spawning Objects/RPCs
-            mgr.Initialize(networker);
+            //mgr.Initialize(networker);
+            NetworkManager.Instance.Initialize(networker);
+            Debug.Log("NetworkManager Initialized");
         }
 
         //Handle Connects/Disconnects
@@ -80,8 +82,8 @@ public class GameClient : MonoBehaviour
         networker.binaryMessageReceived += ReadBinary;
 
         //Request Spawning Player
-        if (connectMainSceneServer)
-            RequestSpawnPlayer(GameSettings.chosenChar);
+        //if (connectMainSceneServer)
+            //RequestSpawnPlayer(GameSettings.chosenChar);
 	}
 
     //Request to Spawn Player
@@ -106,7 +108,7 @@ public class GameClient : MonoBehaviour
 
     public void NetworkObjectDebug(NetWorker networker1)
     {
-        //DESTROY PLAYER
+        Debug.Log("Network Object List: ");
         foreach (var no in networker1.NetworkObjectList)
         {
             Debug.Log("NetObject: " + no.NetworkId);

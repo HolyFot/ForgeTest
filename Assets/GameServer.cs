@@ -75,7 +75,9 @@ public class GameServer : MonoBehaviour
                 mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
 
             //Setup Server for Spawning Objects/RPCs
-            mgr.Initialize(networker);
+            //mgr.Initialize(networker);
+            NetworkManager.Instance.Initialize(networker);
+            Debug.Log("NetworkManager Initialized");
         }
 
         //Handle Connects/Disconnects
@@ -86,10 +88,10 @@ public class GameServer : MonoBehaviour
         networker.binaryMessageReceived += ReadBinary;
 
         //IS NEEDED?
-		if (networker is IServer)
-		{
-		    NetworkObject.Flush(networker); //Called because we are already in the correct scene!
-		}
+		//if (networker is IServer)
+		//{
+		   // NetworkObject.Flush(networker); //Called because we are already in the correct scene!
+		//}
 
 
         //Spawn Server Player
@@ -127,7 +129,10 @@ public class GameServer : MonoBehaviour
             player1.networkObject.playerNetworkId = netID;
 
             if (isClient)
+            {
+                Debug.Log("Assigning Ownership for Client");
                 player1.networkObject.AssignOwnership(clientPlayer);
+            }
         });
     }
 

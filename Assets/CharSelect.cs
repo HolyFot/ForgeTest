@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class CharSelect : MonoBehaviour
 {
     public Dropdown playerMenu;
+    public GameClient client1;
     private string playerName;
 
     public void EnterWorld()
@@ -13,6 +14,8 @@ public class CharSelect : MonoBehaviour
         GameSettings.chosenChar = playerName; //Set Global Game Settings
 
         SceneManager.LoadScene("MainScene");
+
+        client1.RequestSpawnPlayer(playerName);
     }
 
 }
