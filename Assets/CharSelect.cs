@@ -10,10 +10,8 @@ public class CharSelect : MonoBehaviour
     public void EnterWorld()
     {
         playerName = playerMenu.captionText.text;
-
         GameSettings.chosenChar = playerName; //Set Global Game Settings
 
-        Debug.Log("Spawn Player: " + playerName);
         SceneManager.LoadScene("MainScene");
     }
 

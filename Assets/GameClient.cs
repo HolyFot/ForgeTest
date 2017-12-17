@@ -24,7 +24,7 @@ public class GameClient : MonoBehaviour
 	{
         if (GameSettings.isServer == false) //IF IT IS A SERVER DONT START CLIENT
         {
-		    //NetWorker.PingForFirewall((ushort)hostPort);
+		    NetWorker.PingForFirewall((ushort)hostPort);
 
 		    if (useMainThreadManagerForRPCs)
 			    Rpc.MainThreadRunner = MainThreadManager.Instance;
@@ -68,8 +68,10 @@ public class GameClient : MonoBehaviour
 		    }
 		    else if (mgr == null) //Spawn Prefab
 			    mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
-        }
 
+            //Setup Server for Spawning Objects/RPCs
+            mgr.Initialize(networker);
+        }
 
         //Handle Connects/Disconnects
         networker.disconnected += ServerDisconnect;
@@ -96,6 +98,20 @@ public class GameClient : MonoBehaviour
         ((UDPClient)client).Send(bin, true);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
+            NetworkObjectDebug(client);
+    }
+
+    public void NetworkObjectDebug(NetWorker networker1)
+    {
+        //DESTROY PLAYER
+        foreach (var no in networker1.NetworkObjectList)
+        {
+            Debug.Log("NetObject: " + no.NetworkId);
+        }
+    }
 
     private void ServerDisconnect(NetWorker networker1)
     {
