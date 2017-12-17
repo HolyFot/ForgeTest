@@ -1,0 +1,16 @@
+[12/16/2017 5:59:18 PM - INFO] ========= START RUN =========
+[12/16/2017 6:02:53 PM - EXCEPTION] Message: Thread was being aborted
+  at (wrapper managed-to-native) System.Net.Sockets.Socket:RecvFrom_internal (intptr,byte[],int,int,System.Net.Sockets.SocketFlags,System.Net.SocketAddress&,int&)
+  at System.Net.Sockets.Socket.ReceiveFrom_nochecks_exc (System.Byte[] buf, Int32 offset, Int32 size, SocketFlags flags, System.Net.EndPoint& remote_end, Boolean throwOnError, System.Int32& error) [0x00000] in <filename unknown>:0 
+  at System.Net.Sockets.Socket.ReceiveFrom_nochecks (System.Byte[] buf, Int32 offset, Int32 size, SocketFlags flags, System.Net.EndPoint& remote_end) [0x00000] in <filename unknown>:0 
+  at System.Net.Sockets.Socket.ReceiveFrom (System.Byte[] buffer, System.Net.EndPoint& remoteEP) [0x00000] in <filename unknown>:0 
+  at BeardedManStudios.Forge.Networking.CachedUdpClient.Receive (System.Net.IPEndPoint& remoteEP, System.String& endpoint) [0x00000] in <filename unknown>:0 
+  at BeardedManStudios.Forge.Networking.UDPClient.ReadNetwork () [0x00000] in <filename unknown>:0 
+   at System.Environment.get_StackTrace() in /Users/builduser/buildslave/mono/build/mcs/class/corlib/System/Environment.cs:line 227
+   at BMSLogger.PutLogInFile(Logtype type, System.String log) in C:\GitHub\ForgeTest\Assets\Bearded Man Studios Inc\Scripts\Logging\BMSLogger.cs:line 203
+   at BMSLogger.LogException(System.String log) in C:\GitHub\ForgeTest\Assets\Bearded Man Studios Inc\Scripts\Logging\BMSLogger.cs:line 129
+   at BeardedManStudios.Forge.Logging.BMSLog.InternalLog(Logtype type, System.String text, System.Object[] args)
+   at BeardedManStudios.Forge.Logging.BMSLog.LogException(System.Exception ex)
+   at BeardedManStudios.Forge.Networking.UDPClient.ReadNetwork()
+   at BeardedManStudios.Threading.Task+<>c__DisplayClass1_0.<Queue>b__0(System.Object state)
+[12/16/2017 6:04:08 PM - INFO] ========= START RUN =========

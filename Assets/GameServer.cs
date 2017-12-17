@@ -22,13 +22,16 @@ public class GameServer : MonoBehaviour
 
 	private void Start()
 	{
-        NetWorker.PingForFirewall((ushort)hostPort);
+        if (GameSettings.isServer == true)
+        {
+            NetWorker.PingForFirewall((ushort)hostPort);
 
-		if (useMainThreadManagerForRPCs)
-			Rpc.MainThreadRunner = MainThreadManager.Instance;
+            if (useMainThreadManagerForRPCs)
+                Rpc.MainThreadRunner = MainThreadManager.Instance;
 
-        if (GameSettings.isServer == true) //IF IT IS A CLIENT, DONT START SERVER
-            Host(hostIP, hostPort);
+            if (GameSettings.isServer == true) //IF IT IS A CLIENT, DONT START SERVER
+                Host(hostIP, hostPort);
+        }
 	}
 
     private void Awake()

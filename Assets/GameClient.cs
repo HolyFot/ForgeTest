@@ -22,14 +22,16 @@ public class GameClient : MonoBehaviour
 
 	private void Start()
 	{
-		NetWorker.PingForFirewall((ushort)hostPort);
-
-		if (useMainThreadManagerForRPCs)
-			Rpc.MainThreadRunner = MainThreadManager.Instance;
-
         if (GameSettings.isServer == false) //IF IT IS A SERVER DONT START CLIENT
         {
+		    //NetWorker.PingForFirewall((ushort)hostPort);
+
+		    if (useMainThreadManagerForRPCs)
+			    Rpc.MainThreadRunner = MainThreadManager.Instance;
+
+        
             StartClient(hostIP, hostPort);
+
         }
 	}
 
@@ -56,14 +58,17 @@ public class GameClient : MonoBehaviour
 			return;
 		}
 
-		if (mgr == null && networkManager == null)
-		{
-			Debug.LogWarning("A network manager was not provided, generating a new one instead");
-			networkManager = new GameObject("Network Manager");
-			mgr = networkManager.AddComponent<NetworkManager>();
-		}
-		else if (mgr == null) //Spawn Prefab
-			mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
+        if (connectMainSceneServer)
+        {
+		    if (mgr == null && networkManager == null)
+		    {
+			    Debug.LogWarning("A network manager was not provided, generating a new one instead");
+			    networkManager = new GameObject("Network Manager");
+			    mgr = networkManager.AddComponent<NetworkManager>();
+		    }
+		    else if (mgr == null) //Spawn Prefab
+			    mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
+        }
 
 
         //Handle Connects/Disconnects
