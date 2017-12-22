@@ -713,7 +713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f277cc51013d74543a3fdbb0cf6ea849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkManager: {fileID: 186558, guid: 79adc0da5b6caf74990d862696696ecd, type: 2}
+  networkManager: {fileID: 0}
   useMainThreadManagerForRPCs: 1
   hostIP: 127.0.0.1
   hostPort: 2001

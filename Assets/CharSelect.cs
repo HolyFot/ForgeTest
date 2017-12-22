@@ -15,7 +15,8 @@ public class CharSelect : MonoBehaviour
 
         SceneManager.LoadScene("MainScene");
 
-        client1.RequestSpawnPlayer(playerName);
+        if (GameSettings.isServer == false)
+            client1.RequestSpawnPlayer(playerName);
     }
 
 }
